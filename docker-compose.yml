@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: wordpress-web
+    ports:
+      - "8080:80"  # Access Apache on port 8080
+    volumes:
+      - ../react-block:/var/www/html  # Mount the WordPress code
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: react_block
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: Admin@123
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: wordpress-db
+    environment:
+      MYSQL_ROOT_PASSWORD: Admin@123
+      MYSQL_DATABASE: react_block
+      MYSQL_USER: admin                   # MySQL user
+      MYSQL_PASSWORD: Admin@123      # Password for the MySQL user
+    volumes:
+      - db_data:/var/lib/mysql  # Persist MySQL data
+
+volumes:
+  db_data:
